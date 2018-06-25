@@ -22,8 +22,7 @@
 - `ssh <USERNAME>@<SERVER_NAME>.cloudapp.azure.com`
 
 4. Create installation script
-- `touch installoc.sh && chmod 755 installoc.sh && nano installoc.sh`
-- Paste script, save (Ctrl+O) and close (Ctrl+X) file
+- `wget https://raw.githubusercontent.com/luiscantero/azure-openconnect-vpn/master/installoc.sh && sudo chmod 755 installoc.sh`
 - Run: `./installoc.sh <FQDN> <EMAIL>`
 - Example: `./installoc.sh EXAMPLE.eastus.cloudapp.azure.com luis@example.com`
 
