@@ -30,8 +30,11 @@ sudo certbot certonly --standalone --preferred-challenges http --agree-tos -n --
 
 echo "3/7. Auto-renew certificate daily ..."
 # Auto update OS at 7 AM every Monday.
-(crontab -l 2>/dev/null; echo "0 7 * * 1 apt-get update && sudo apt-get upgrade -y") | crontab -
-(crontab -l 2>/dev/null; echo "@daily certbot renew --quiet && systemctl restart ocserv") | crontab -
+(crontab -l 2>/dev/null; echo "0 7 * * 1 apt-get update && apt-get upgrade -y && reboot") | crontab -
+# Auto renews cert on the 1st/15th of every month (done if there are < 30 days remaining).
+(crontab -l 2>/dev/null; echo "0 6 1,15 * * certbot renew --quiet --post-hook \"systemctl restart ocserv\"") | crontab -
+# Remove default daily renewal cron job.
+sudo rm /etc/cron.d/certbot
 
 echo "4/7. OpenConnect VPN server config ..."
 # Use Let's Encrypt certificate.
