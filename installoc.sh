@@ -65,8 +65,23 @@ sudo sysctl -p
 echo "6/7. Configure IP masquerading ..."
 eth0="$(ip addr | grep BROADCAST | grep -v NO-CARRIER | cut -d ':' -f 2 | tr -d '[:space:]')"
 sudo iptables -t nat -A POSTROUTING -o $eth0 -j MASQUERADE
+sudo iptables -P FORWARD ACCEPT
 
 echo "7/7. Persist IPTable configuration ..."
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
 echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 sudo apt-get install iptables-persistent -y
+
+echo "8/8. Enable LAN access ..."
+#sudo nano /etc/sysctl.conf
+# Enable Proxy ARP on all interfaces.
+#net/ipv4/conf/all/proxy_arp=1
+#sudo sysctl -p
+
+# Configure DNS and IP range
+#sudo nano /etc/ocserv/ocserv.conf
+# Router gateway.
+#dns = 192.168.178.1
+# Outside of router DHCP range.
+#ipv4-network = 192.168.178.201/27
+#sudo systemctl restart ocserv
